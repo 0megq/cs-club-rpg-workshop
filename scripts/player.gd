@@ -7,10 +7,6 @@ const PLAYER_MAX_SPEED: float = 70
 
 
 func _physics_process(_delta: float) -> void:
-	# Don't simulate anything if we're in the editor
-	if Engine.is_editor_hint():
-		return
-		
 	animate()
 	move()
 	
