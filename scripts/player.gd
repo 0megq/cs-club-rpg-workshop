@@ -45,3 +45,7 @@ func move() -> void:
 	velocity = input * PLAYER_MAX_SPEED
 	move_and_slide()
 	
+
+
+func _on_attack_hitbox_body_entered(body: Node2D) -> void:
+	body.damage()

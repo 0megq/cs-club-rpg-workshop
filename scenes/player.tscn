@@ -4,13 +4,31 @@
 [ext_resource type="PackedScene" uid="uid://dmgituaiyivok" path="res://scenes/character_sprite.tscn" id="2_g2els"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(8, 6)
+size = Vector2(8, 15)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_g2els"]
+radius = 4.0
+height = 12.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1323918516]
 script = ExtResource("1_3vyb7")
 
 [node name="Sprite2D" parent="." unique_id=884627544 instance=ExtResource("2_g2els")]
+frame = 23
+dir = 1
+anim_frame = 2
+character = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1545418955]
-position = Vector2(0, 5)
+position = Vector2(0, 0.5)
 shape = SubResource("RectangleShape2D_g2els")
+
+[node name="AttackHitbox" type="Area2D" parent="." unique_id=1382288509]
+rotation = 1.6179202
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=521849127]
+position = Vector2(-10, 0)
+shape = SubResource("CapsuleShape2D_g2els")
+debug_color = Color(1, 0, 0, 0.41960785)
+
+[connection signal="body_entered" from="AttackHitbox" to="." method="_on_attack_hitbox_body_entered"]
