@@ -15,11 +15,16 @@ func _ready() -> void:
 func _physics_process(_delta: float) -> void:
 	animate()
 	move()
-	# Update direction vector
-	if velocity != Vector2.ZERO:
-		direction = velocity
 	
-	# Handle attack
+	# Update direction vector
+	var input := Input.get_vector("left", "right", "up", "down")
+	if input != Vector2.ZERO:
+		direction = input
+	
+	handle_attack()
+
+
+func handle_attack() -> void:
 	if Input.is_action_just_pressed("attack"):
 		$AttackHitbox.monitoring = true
 		$AttackHitbox.show()
@@ -41,13 +46,14 @@ func _physics_process(_delta: float) -> void:
 
 func animate() -> void:
 	# Do the direction
-	if velocity.x > 0:
+	var input := Input.get_vector("left", "right", "up", "down")
+	if input.x > 0:
 		sprite.dir = sprite.Dir.RIGHT
-	elif velocity.x < 0:
+	elif input.x < 0:
 		sprite.dir = sprite.Dir.LEFT
-	elif velocity.y < 0:
+	elif input.y < 0:
 		sprite.dir = sprite.Dir.UP
-	elif velocity.y > 0:
+	elif input.y > 0:
 		sprite.dir = sprite.Dir.DOWN
 		
 	# Do the walk and idle
@@ -72,7 +78,6 @@ func move() -> void:
 	var input := Input.get_vector("left", "right", "up", "down").normalized()
 	velocity = input * PLAYER_MAX_SPEED
 	move_and_slide()
-	
 
 
 func _on_attack_hitbox_body_entered(body: Node2D) -> void:
