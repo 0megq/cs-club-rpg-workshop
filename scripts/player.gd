@@ -4,6 +4,7 @@ extends CharacterBody2D
 const PLAYER_MAX_SPEED: float = 70
 		
 var direction: Vector2 = Vector2.DOWN
+var health: int = 5
 
 @onready var sprite: CharacterSprite = $Sprite2D		
 
@@ -13,11 +14,16 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if health <= 0:
+		return
+	
 	animate()
 	move()
+	
 	# Update direction vector
-	if velocity != Vector2.ZERO:
-		direction = velocity
+	var input: Vector2 = Input.get_vector("left", "right", "up", "down")
+	if input != Vector2.ZERO:
+		direction = input
 	
 	# Handle attack
 	if Input.is_action_just_pressed("attack"):
@@ -41,13 +47,14 @@ func _physics_process(_delta: float) -> void:
 
 func animate() -> void:
 	# Do the direction
-	if velocity.x > 0:
+	var input: Vector2 = Input.get_vector("left", "right", "up", "down")
+	if input.x > 0:
 		sprite.dir = sprite.Dir.RIGHT
-	elif velocity.x < 0:
+	elif input.x < 0:
 		sprite.dir = sprite.Dir.LEFT
-	elif velocity.y < 0:
+	elif input.y < 0:
 		sprite.dir = sprite.Dir.UP
-	elif velocity.y > 0:
+	elif input.y > 0:
 		sprite.dir = sprite.Dir.DOWN
 		
 	# Do the walk and idle
@@ -84,3 +91,11 @@ func _on_attack_hitbox_body_entered(body: Node2D) -> void:
 func _on_attack_timer_timeout() -> void:
 	$AttackHitbox.monitoring = false
 	$AttackHitbox.hide()
+	
+
+func damage() -> void:
+	health -= 1
+	print("Player health: " + str(health))
+	if health <= 0:
+		$Sprite2D.hide()
+		$DeadSprite.show()

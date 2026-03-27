@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://bruqji6vxrndw"]
+
+[ext_resource type="Script" uid="uid://vl5t612p73ge" path="res://scripts/enemy.gd" id="1_c4w8v"]
+[ext_resource type="PackedScene" uid="uid://dmgituaiyivok" path="res://scenes/character_sprite.tscn" id="2_xwavj"]
+[ext_resource type="AudioStream" uid="uid://dq3mj2compq63" path="res://assets/sword_hit.mp3" id="3_nenq2"]
+[ext_resource type="AudioStream" uid="uid://b010t1g3ys4tp" path="res://assets/sword_kill.mp3" id="4_md484"]
+[ext_resource type="Texture2D" uid="uid://cd2j0yjjfidrj" path="res://assets/dead.png" id="5_ipns3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lnu2h"]
+size = Vector2(6, 6)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c4w8v"]
+radius = 5.0990195
+
+[node name="Enemy" type="CharacterBody2D" unique_id=1274458205 groups=["enemy"]]
+motion_mode = 1
+script = ExtResource("1_c4w8v")
+
+[node name="Sprite2D" parent="." unique_id=884627544 instance=ExtResource("2_xwavj")]
+frame = 73
+dir = 2
+anim_frame = 1
+character = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=573129728]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_lnu2h")
+
+[node name="Hit" type="AudioStreamPlayer" parent="." unique_id=632837712]
+stream = ExtResource("3_nenq2")
+
+[node name="Dead" type="AudioStreamPlayer" parent="." unique_id=347232114]
+stream = ExtResource("4_md484")
+
+[node name="DeadSprite" type="Sprite2D" parent="." unique_id=1309636525]
+visible = false
+texture = ExtResource("5_ipns3")
+hframes = 3
+vframes = 4
+frame = 6
+
+[node name="AttackHitbox" type="Area2D" parent="." unique_id=1275854322]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox" unique_id=2136860029]
+position = Vector2(0, 2)
+shape = SubResource("CircleShape2D_c4w8v")
+debug_color = Color(0.99729735, 0, 0.1787397, 0.41960785)
+
+[connection signal="body_entered" from="AttackHitbox" to="." method="_on_attack_hitbox_body_entered"]
