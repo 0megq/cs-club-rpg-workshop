@@ -1,15 +1,14 @@
 extends CharacterBody2D
 
-@export var max_health: int = 5
-
-@onready var health: int = max_health
+var max_health: int = 5
+var health: int = 5
 
 func damage() -> void:
-	# decrease health and display
+	#health = health - 1
 	health -= 1
-	print("OW!")
-	print(name + " health: " + str(health))
-	
-	# delete the enemy if 0 hp
+	$Hit.play()
+	print(health)
 	if health <= 0:
-		queue_free()
+		$Dead.play()
+		$Sprite2D.hide()
+		$DeadSprite.show()
