@@ -12,6 +12,12 @@ size = Vector2(6, 6)
 [sub_resource type="CircleShape2D" id="CircleShape2D_c4w8v"]
 radius = 5.0990195
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c4w8v"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xwavj"]
+bg_color = Color(1, 0.3259753, 0.39573997, 1)
+
 [node name="Enemy" type="CharacterBody2D" unique_id=1274458205 groups=["enemy"]]
 motion_mode = 1
 script = ExtResource("1_c4w8v")
@@ -45,5 +51,16 @@ frame = 6
 position = Vector2(0, 2)
 shape = SubResource("CircleShape2D_c4w8v")
 debug_color = Color(0.99729735, 0, 0.1787397, 0.41960785)
+
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=1138446080]
+offset_left = -12.0
+offset_top = -12.0
+offset_right = 12.0
+offset_bottom = -6.0
+theme_override_styles/background = SubResource("StyleBoxFlat_c4w8v")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xwavj")
+max_value = 10.0
+value = 5.0
+show_percentage = false
 
 [connection signal="body_entered" from="AttackHitbox" to="." method="_on_attack_hitbox_body_entered"]

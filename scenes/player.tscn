@@ -3,8 +3,14 @@
 [ext_resource type="Script" uid="uid://c6yf8mvlpfepw" path="res://scripts/player.gd" id="1_3vyb7"]
 [ext_resource type="PackedScene" uid="uid://dmgituaiyivok" path="res://scenes/character_sprite.tscn" id="2_g2els"]
 [ext_resource type="Texture2D" uid="uid://dhic5xlb7afhy" path="res://assets/things.png" id="3_qhqgy"]
+[ext_resource type="Shader" uid="uid://csthg21cjo320" path="res://scripts/overlay.gdshader" id="3_tuyoq"]
 [ext_resource type="AudioStream" uid="uid://bw2nhvuspwbsk" path="res://assets/sword_slash.mp3" id="4_dqkch"]
 [ext_resource type="Texture2D" uid="uid://cd2j0yjjfidrj" path="res://assets/dead.png" id="5_qlg0r"]
+[ext_resource type="AudioStream" uid="uid://de7egjhipwr07" path="res://assets/player_hurt.mp3" id="7_fjrip"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fjrip"]
+shader = ExtResource("3_tuyoq")
+shader_parameter/color_overlay = Color(1, 1, 1, 0)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
 size = Vector2(8, 16)
@@ -13,10 +19,17 @@ size = Vector2(8, 16)
 radius = 6.0
 height = 20.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qlg0r"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tuyoq"]
+bg_color = Color(1, 0.3259753, 0.39573997, 1)
+
 [node name="Player" type="CharacterBody2D" unique_id=1323918516 groups=["player"]]
 script = ExtResource("1_3vyb7")
 
 [node name="Sprite2D" parent="." unique_id=884627544 instance=ExtResource("2_g2els")]
+material = SubResource("ShaderMaterial_fjrip")
 frame = 54
 character = 6
 
@@ -49,5 +62,23 @@ texture = ExtResource("5_qlg0r")
 region_enabled = true
 region_rect = Rect2(0, 48, 15, 16)
 
+[node name="HealthBar" type="ProgressBar" parent="." unique_id=1656471674]
+offset_left = -12.0
+offset_top = -16.0
+offset_right = 12.0
+offset_bottom = -10.0
+theme_override_styles/background = SubResource("StyleBoxFlat_qlg0r")
+theme_override_styles/fill = SubResource("StyleBoxFlat_tuyoq")
+max_value = 10.0
+value = 5.0
+show_percentage = false
+
+[node name="FlashTimer" type="Timer" parent="." unique_id=1516909854]
+one_shot = true
+
+[node name="Hit" type="AudioStreamPlayer" parent="." unique_id=292342090]
+stream = ExtResource("7_fjrip")
+
 [connection signal="body_entered" from="AttackHitbox" to="." method="_on_attack_hitbox_body_entered"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
+[connection signal="timeout" from="FlashTimer" to="." method="_on_flash_timer_timeout"]

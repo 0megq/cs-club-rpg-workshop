@@ -3,9 +3,17 @@ extends CharacterBody2D
 const ENEMY_MAX_SPEED: float = 40
 
 var max_health: int = 5
-var health: int = 5
+var health: int = 5 :
+	set(value):
+		health = value
+		health_bar.value = value
 
+@onready var health_bar: ProgressBar = $HealthBar
 @onready var sprite: CharacterSprite = $Sprite2D
+
+func _ready() -> void:
+	# Set the health bar's max value to the health at the start
+	health_bar.max_value = health
 
 func _physics_process(_delta: float) -> void:
 	if health > 0:
@@ -56,7 +64,6 @@ func damage() -> void:
 	#health = health - 1
 	health -= 1
 	$Hit.play()
-	print(health)
 	if health <= 0:
 		$Dead.play()
 		$Sprite2D.hide()

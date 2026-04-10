@@ -4,11 +4,18 @@ extends CharacterBody2D
 const PLAYER_MAX_SPEED: float = 70
 		
 var direction: Vector2 = Vector2.DOWN
-var health: int = 5
+var health: int = 5 :
+	set(value):
+		health = value
+		health_bar.value = value
 
+@onready var health_bar: ProgressBar = $HealthBar
 @onready var sprite: CharacterSprite = $Sprite2D		
 
 func _ready() -> void:
+	# Set the health bar's max value to the health at the start
+	health_bar.max_value = health
+	
 	$AttackHitbox.monitoring = false
 	$AttackHitbox.hide()
 
@@ -95,7 +102,14 @@ func _on_attack_timer_timeout() -> void:
 
 func damage() -> void:
 	health -= 1
-	print("Player health: " + str(health))
+	sprite.material.set_shader_parameter("color_overlay", Color.WHITE)
+	$FlashTimer.start(0.1)
+	$Hit.play()
+	
 	if health <= 0:
 		$Sprite2D.hide()
 		$DeadSprite.show()
+
+
+func _on_flash_timer_timeout() -> void:
+	sprite.material.set_shader_parameter("color_overlay", Color.TRANSPARENT)
