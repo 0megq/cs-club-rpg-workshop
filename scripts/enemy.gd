@@ -63,8 +63,12 @@ func animate() -> void:
 func damage() -> void:
 	#health = health - 1
 	health -= 1
+	sprite.material.set_shader_parameter("color_overlay", Color.WHITE)
+	$FlashTimer.start(0.1)
 	$Hit.play()
+	
 	if health <= 0:
+		$AttackHitbox.monitoring = false
 		$Dead.play()
 		$Sprite2D.hide()
 		$DeadSprite.show()
@@ -73,3 +77,7 @@ func damage() -> void:
 func _on_attack_hitbox_body_entered(body: Node2D) -> void:
 	if body.is_in_group("player"):
 		body.damage()
+
+
+func _on_flash_timer_timeout() -> void:
+	sprite.material.set_shader_parameter("color_overlay", Color.TRANSPARENT)

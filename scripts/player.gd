@@ -39,7 +39,7 @@ func _physics_process(_delta: float) -> void:
 		$Slash.play()
 		
 		# rotate hitbox in direction of movement
-		$AttackHitbox.rotation = direction.angle()
+		$AttackHitbox.rotation = get_local_mouse_position().angle()
 		
 		# wait 1 second
 		$AttackTimer.start(0.3)
